@@ -55,20 +55,8 @@ public class UserServlet extends HttpServlet {
         MessageModel messageModel = userService.userLogin(uname,upwd,same);
         // 3. 判断消息模型的状态码
         if (messageModel.getCode() == 1 ) { // 成功
-            String flag=request.getParameter("OneWeekLogin");
-            if (flag.equals("ok"))
-            {
-                cookie_name.setMaxAge(1000*60*60*24*7);
-                cookie_pwd.setMaxAge(1000*60*60*24*7);
-                response.addCookie(cookie_name);
-                response.addCookie(cookie_pwd);
-
-            }
             // 将消息模型中的用户信息设置到session作用域中，重定向跳转到index.jsp
             request.getSession().setAttribute("user",messageModel.getObject());
-            request.getSession().setAttribute("dwnFile1",messageModel.getFile1());
-            request.getSession().setAttribute("dwnFile2",messageModel.getFile2());
-            request.getSession().setAttribute("dwnFile3",messageModel.getFile3());
             response.sendRedirect("index.jsp");
         } else { // 失败
             // 将消息模型对象设置到request作用域中，请求转发跳转到login.jsp

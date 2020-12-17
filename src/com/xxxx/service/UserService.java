@@ -1,15 +1,11 @@
 package com.xxxx.service;
 
-import com.xxxx.entity.DwnFile;
 import com.xxxx.entity.User;
 import com.xxxx.entity.vo.MessageModel;
-import com.xxxx.mapper.DownloadFile;
 import com.xxxx.mapper.UserMapper;
 import com.xxxx.util.GetSqlSession;
 import com.xxxx.util.StringUtil;
 import org.apache.ibatis.session.SqlSession;
-
-import javax.servlet.http.HttpSession;
 
 /**
  * 业务逻辑
@@ -38,12 +34,6 @@ public class UserService {
         u.setUserName(uname);
         u.setUserPwd(upwd);
         messageModel.setObject(u);
-        DwnFile d1=new DwnFile();
-        DwnFile d2=new DwnFile();
-        DwnFile d3=new DwnFile();
-
-
-
         //  1. 参数的非空判断
         if (StringUtil.isEmpty(uname) || StringUtil.isEmpty(upwd)) {
             // 将状态码、提示信息、回显数据设置到消息模型对象中，返回消息模型对象
@@ -57,34 +47,7 @@ public class UserService {
         SqlSession session= GetSqlSession.createSqlSession();
         UserMapper userMapper = session.getMapper(UserMapper.class);
         User user = userMapper.queryUserByName(uname);
-        DownloadFile downloadFile=session.getMapper(DownloadFile.class);
-        DwnFile dwnFile1=downloadFile.queryFileById1(1);
-        DwnFile dwnFile2=downloadFile.queryFileById2(2);
-        DwnFile dwnFile3=downloadFile.queryFileById3(3);
-        d1.setId(dwnFile1.id);
-        d1.setDescription(dwnFile1.description);
-        d1.setImage(dwnFile1.image);
-        d1.setName(dwnFile1.name);
-        d1.setPath(dwnFile1.path);
-        d1.setSize(dwnFile1.size);
-        d1.setStart(dwnFile1.start);
-        d2.setId(dwnFile2.id);
-        d2.setDescription(dwnFile2.description);
-        d2.setImage(dwnFile2.image);
-        d2.setName(dwnFile2.name);
-        d2.setPath(dwnFile2.path);
-        d2.setSize(dwnFile2.size);
-        d2.setStart(dwnFile2.start);
-        d3.setId(dwnFile3.id);
-        d3.setDescription(dwnFile3.description);
-        d3.setImage(dwnFile3.image);
-        d3.setName(dwnFile3.name);
-        d3.setPath(dwnFile3.path);
-        d3.setSize(dwnFile3.size);
-        d3.setStart(dwnFile3.start);
-        messageModel.setFile1(d1);
-        messageModel.setFile2(d2);
-        messageModel.setFile3(d3);
+
 
         // 3. 判断用户对象是否为空
         if (user == null ) {
@@ -109,35 +72,8 @@ public class UserService {
         }
         // 登录成功，将用户信息设置到消息模型中
         messageModel.setObject(user);
-        messageModel.setFile1(dwnFile1);
-        messageModel.setFile2(dwnFile2);
-        messageModel.setFile3(dwnFile3);
-        return messageModel;
-    }
-    public MessageModel userSignin(String name,String realname,String pwd,String addr,String email)
-    {
-        MessageModel messageModel=new MessageModel();
-        User u=new User();
-        u.setUserName(name);
-        u.setRealName(realname);
-        u.setUserPwd(pwd);
-        u.setAddress(addr);
-        u.setEmail(email);
-        messageModel.setObject(u);
-        if (StringUtil.isEmpty(name) || StringUtil.isEmpty(pwd)|| StringUtil.isEmpty(realname)|| StringUtil.isEmpty(addr)|| StringUtil.isEmpty(email)) {
-            // 将状态码、提示信息、回显数据设置到消息模型对象中，返回消息模型对象
-            messageModel.setCode(0);
-            return  messageModel;
-        }
-        SqlSession session= GetSqlSession.createSqlSession();
-        UserMapper userMapper = session.getMapper(UserMapper.class);
-        Integer resault=userMapper.insertinfo(u);
-        session.commit();
-        if (resault<=0)
-        {
-            messageModel.setCode(0);
-        }
 
         return messageModel;
     }
+
 }
